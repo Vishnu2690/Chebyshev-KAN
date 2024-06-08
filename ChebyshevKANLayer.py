@@ -20,8 +20,9 @@ class ChebyshevKANLayer(nn.Module):
 
     def forward(self, x):
         x = x.view(-1, self.inputdim)
-        x = 2 * (x - x.min(dim=1, keepdim=True)[0]) / (x.max(dim=1, keepdim=True)[0] - x.min(dim=1, keepdim=True)[0]) - 1
+        x = torch.tanh(x)  
         T = self.chebyshev_polynomials(x)
         y = torch.einsum("bij,ioj->bo", T, self.cheby_coeffs)
         y = y.view(-1, self.outdim)
         return y
+        
